@@ -542,6 +542,24 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 }
 
 
+/*//this line was added.
+=================//this line was added.
+rocket_think      //this is tho allow me to have the rockets accelorate if it works.//this line was added.
+=================//this line was added.
+*///this line was added.
+void rocket_think (edict_t *self)//this line was added.
+{//this line was added.
+	if (self->count >= 1000) {//this line was added.
+		self->count = 1000;//this line was added.
+	}//this line was added.
+	else//this line was added.
+		self->count *= 2;//this line was added.
+	gi.centerprintf(self->owner, "Rocket Speed %i\n", self->count);//this line was added.
+	VectorScale (self->movedir, self->count, self->velocity);//this line was added.
+	self->nextthink =level.time + .1;//this line was added.
+	self->think = rocket_think;//this line was added.
+}//this line was added.
+
 /*
 =================
 fire_rocket
@@ -615,9 +633,13 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	VectorClear (rocket->maxs);
 	rocket->s.modelindex = gi.modelindex ("models/objects/rocket/tris.md2");
 	rocket->owner = self;
-	rocket->touch = rocket_touch;
-	rocket->nextthink = level.time + 8000/speed;
-	rocket->think = G_FreeEdict;
+	rocket->touch = rocket_touch;	
+	speed = 30;										//this line was added.
+	rocket->count = speed;							//this line was added.
+	rocket->nextthink = level.time + .1;			//this line was edited to be new it was the line below.
+//	rocket->nextthink = level.time + 8000/speed;	//this is was the line above used to be.
+	rocket->think = rocket_think;					//this line was edited to be new it was the line below.
+//	rocket->think = G_FreeEdict;					//this is was the line above used to be.
 	rocket->dmg = damage;
 	rocket->radius_dmg = radius_damage;
 	rocket->dmg_radius = damage_radius;
